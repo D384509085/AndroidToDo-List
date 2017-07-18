@@ -11,4 +11,5 @@ public class NoteEntity {
     private String stopTime;
     private int priorty;
     private boolean isFinished;
+    private boolean isAlarm;
 }
