@@ -11,17 +11,10 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/OverflowMenuStyle"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
-        <com.astuetz.PagerSlidingTabStrip
-            android:id="@+id/sliding"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            tools:layout_editor_absoluteY="0dp"
-            tools:layout_editor_absoluteX="8dp">
-
-        </com.astuetz.PagerSlidingTabStrip>
 </android.support.constraint.ConstraintLayout>

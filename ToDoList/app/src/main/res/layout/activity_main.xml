@@ -8,10 +8,23 @@
     android:layout_height="match_parent"
     tools:context="enbledu.todolist.activity.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/OverflowMenuStyle"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+         />
     <com.astuetz.PagerSlidingTabStrip
         android:id="@+id/pager_sliding"
         android:layout_width="match_parent"
-        android:layout_height="48dp"></com.astuetz.PagerSlidingTabStrip>
+        app:pstsIndicatorHeight="4dp"
+        app:pstsShouldExpand="true"
+        android:layout_height="48dp">
+
+    </com.astuetz.PagerSlidingTabStrip>
 
     <android.support.v4.view.ViewPager
             android:id="@+id/pager"
