@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         list.add(fragment2);
         mvViewPager=(ViewPager)findViewById(R.id.pager);
         mvViewPager.setAdapter(new MyFragmentAdapter(getSupportFragmentManager(), list));
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.pager_sliding);
+        tabs.setViewPager(mvViewPager);
         mvViewPager.setPageTransformer(true, new DepthPageTransformer());
         mvViewPager.setCurrentItem(0);
         mvViewPager.setOffscreenPageLimit(5);
