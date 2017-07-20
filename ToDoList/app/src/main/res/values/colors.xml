@@ -17,7 +17,8 @@
     <color name="text_grey">#999999</color>
     <color name="bg_grey">#F5F5F5</color>
     <color name="text_red">#F74C4C</color>
-    <color name="bg_circle_grey">#979797</color>
+    <color name="bg_circle">#979797</color>
+    <color name="bg_circle_main">#707070</color>
     <color name="transparent">#00ffffff</color>
     <color name="text_markview">#eb5c05</color>
     <color name="linechart_org">#F6A623</color>

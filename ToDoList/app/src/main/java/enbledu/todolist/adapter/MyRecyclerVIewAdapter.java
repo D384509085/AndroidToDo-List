@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.List;
@@ -31,13 +32,15 @@ public class MyRecyclerVIewAdapter extends RecyclerView.Adapter<MyRecyclerVIewAd
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.note_item, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(view);
+        viewHolder.setIsRecyclable(false);
+
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         holder.mTextView.setText(mDatas.get(position));
-
+        holder.mCheckBox.setTag(new Integer(position));
     }
 
 
@@ -48,9 +51,12 @@ public class MyRecyclerVIewAdapter extends RecyclerView.Adapter<MyRecyclerVIewAd
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
+        CheckBox mCheckBox;
         public MyViewHolder(View itemView) {
             super(itemView);
             mTextView = (TextView) itemView.findViewById(R.id.text_view);
+            mCheckBox = (CheckBox) itemView.findViewById(R.id.checkbox);
+
         }
     }
 }

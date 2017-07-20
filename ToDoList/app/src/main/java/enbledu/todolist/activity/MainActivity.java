@@ -1,13 +1,13 @@
 package enbledu.todolist.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         //toolbar.setLogo(R.mipmap.ic_launcher);//设置app logo
         mToolbar.setTitle(getString(R.string.app_name));//设置主标题
         //toolbar.setSubtitle("Subtitle");//设置子标题
@@ -48,18 +48,18 @@ public class MainActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int menuItemId = item.getItemId();
                 if (menuItemId == R.id.menu1) {
-                    Toast.makeText(MainActivity.this, "1", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, EditActivity.class);
+                    startActivity(intent);
 
                 } else if (menuItemId == R.id.menu2) {
-                    Toast.makeText(MainActivity.this, "2", Toast.LENGTH_SHORT).show();
 
-                } else if (menuItemId == R.id.menu3) {
-                    Toast.makeText(MainActivity.this, "3", Toast.LENGTH_SHORT).show();
 
                 }
                 return true;
             }
         });
+
+
     }
 
 

@@ -4,16 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item android:id="@+id/menu1"
-        android:title="Search"
+        android:title="@string/menu1"
         android:icon="@mipmap/ic_launcher"
         app:showAsAction="never"/>
     <item android:id="@+id/menu2"
-        android:title="notifications"
+        android:title="@string/menu2"
         android:icon="@mipmap/ic_launcher"
         app:showAsAction="never"/>
-    <item android:id="@+id/menu3"
-        android:title="asd"
-        android:orderInCategory="100"
-        android:icon="@mipmap/ic_launcher"
-        app:showAsAction="never"/>
+
 </menu>

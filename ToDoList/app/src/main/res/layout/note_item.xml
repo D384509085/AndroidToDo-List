@@ -9,19 +9,29 @@
     android:layout_marginBottom="4dp"
     android:layout_width="match_parent"
     android:layout_height="40dp">
-
-    <TextView
-        android:id="@+id/text_view"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:layout_marginTop="1dp"
+        android:layout_height="wrap_content">
+        <CheckBox
+            android:paddingLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="8dp"
+            android:id="@+id/checkbox"
+            android:focusable="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/checkbox" />
 
-    <CheckBox
-        android:layout_marginLeft="10dp"
-        android:button="@drawable/checkbox"
-        android:id="@+id/checkBox"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:text="CheckBox" />
-
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text=""/>
+    </LinearLayout>
 </android.support.v7.widget.CardView>

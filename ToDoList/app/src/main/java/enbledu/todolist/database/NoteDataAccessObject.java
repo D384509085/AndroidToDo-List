@@ -25,7 +25,8 @@ public interface NoteDataAccessObject {
     public void updataNote(NoteEntity noteEntity);
 
     /**
-     * 按照指定顺序读取数据
+     * 是否按优先级排列
      */
-    public List<NoteEntity> getThreads(String colName);
+    public List<NoteEntity> getThreads(boolean isSort);
+
 }
