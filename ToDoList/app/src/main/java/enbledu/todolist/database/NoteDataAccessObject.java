@@ -27,6 +27,6 @@ public interface NoteDataAccessObject {
     /**
      * 是否按优先级排列
      */
-    public ArrayList<NoteEntity> getNoteDatas(boolean isSort);
+    public ArrayList<NoteEntity> getNoteDatas(String sortMethod);
 
 }

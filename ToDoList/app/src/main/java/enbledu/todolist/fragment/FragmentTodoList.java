@@ -3,13 +3,14 @@ package enbledu.todolist.fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,17 +57,19 @@ public class FragmentTodoList extends Fragment {
         mRecyclerView = (RecyclerView) mView.findViewById(R.id.recyclerview);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void initDatas() {
         //是否按优先级排序
-        boolean isSort = Boolean.parseBoolean(SortHelper.load(mContext));
+       String sortMethod = SortHelper.load(mContext);
         noteDatas = new ArrayList<NoteEntity>();
         mDAO = new NoteDAOImpl(mContext);
-        noteDatas =  mDAO.getNoteDatas(isSort);
-        Log.i(TAG, String.valueOf(isSort));
+        noteDatas =  mDAO.getNoteDatas(sortMethod);
+
 
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onResume() {
         super.onResume();
@@ -76,6 +79,18 @@ public class FragmentTodoList extends Fragment {
         //设置recycleview的布局管理
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        refleshVIew();
+    }
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void refleshVIew() {
+        noteDatas.clear();
+        initDatas();
+        myRecyclerVIewAdapter = new MyRecyclerVIewAdapter(mContext, noteDatas);
+        mRecyclerView.setAdapter(myRecyclerVIewAdapter);
+        //设置recycleview的布局管理
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        myRecyclerVIewAdapter.notifyDataSetChanged();
         myRecyclerVIewAdapter.setListener(new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -107,15 +122,5 @@ public class FragmentTodoList extends Fragment {
 
             }
         });
-    }
-    public void refleshVIew() {
-        noteDatas.clear();
-        initDatas();
-        myRecyclerVIewAdapter = new MyRecyclerVIewAdapter(mContext, noteDatas);
-        mRecyclerView.setAdapter(myRecyclerVIewAdapter);
-        //设置recycleview的布局管理
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        myRecyclerVIewAdapter.notifyDataSetChanged();
     }
 }

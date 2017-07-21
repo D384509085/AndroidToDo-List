@@ -4,9 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import enbledu.todolist.entity.NoteEntity;
 
@@ -74,21 +77,25 @@ public class NoteDAOImpl implements NoteDataAccessObject {
         } else {
             edit_values.put("isFinished", 0);
         }
-        db.update("note", edit_values, "title = ?", new String[]{noteEntity.getTitle()});
+        db.update("note_info", edit_values, "title = ?", new String[]{noteEntity.getTitle()});
         db.close();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public ArrayList<NoteEntity> getNoteDatas(boolean isSort) {
+    public ArrayList<NoteEntity> getNoteDatas(String sortMethod) {
         SQLiteDatabase db = mHelper.getReadableDatabase();
         ArrayList<NoteEntity> list = new ArrayList<NoteEntity>();
         /*Cursor cursor = db.rawQuery("select * from thread_info where url = ?",
                  new String[]{url});*/
         Cursor cursor;
-        if (isSort) {
+        if (Objects.equals(sortMethod, "优先级")) {
             cursor = db.query("note_info", null, null, null, null, null, "priorty");
-        } else {
+        } else if (Objects.equals(sortMethod, "时间")){
             cursor = db.query("note_info", null, null, null, null, null, null);
+        }
+        else {
+            cursor = db.query("note_info", null, null, null, null, null, "isFinished");
         }
         while (cursor.moveToNext()) {
             NoteEntity note = new NoteEntity();

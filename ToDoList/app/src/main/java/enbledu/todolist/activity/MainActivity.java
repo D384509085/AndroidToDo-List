@@ -53,12 +53,17 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, EditActivity.class);
                     startActivity(intent);
                 } else if (menuItemId == R.id.menu2) {
-                    SortHelper.save("false", MainActivity.this);
+                    SortHelper.save("时间", MainActivity.this);
                     fragmentTodoList.refleshVIew();
 
                 } else if (menuItemId == R.id.menu3) {
-                    SortHelper.save("true", MainActivity.this);
+                    SortHelper.save("优先级", MainActivity.this);
                     fragmentTodoList.refleshVIew();
+
+                } else if (menuItemId == R.id.menu4) {
+                    SortHelper.save("是否完成", MainActivity.this);
+                    fragmentTodoList.refleshVIew();
+
 
                 }
                 return true;

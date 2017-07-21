@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -48,8 +50,38 @@ public class MyRecyclerVIewAdapter extends RecyclerView.Adapter<MyRecyclerVIewAd
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        NoteEntity noteInRecycleViewItem = noteDatas.get(position);
+        final NoteEntity noteInRecycleViewItem = noteDatas.get(position);
         holder.mTextView.setText(noteInRecycleViewItem.getTitle());
+
+        if(noteInRecycleViewItem.isFinished()) {
+            holder.mTextView.setTextColor(mContext.getResources().getColor(R.color.text_grey));
+            holder.mCheckBox.setChecked(true);
+        }
+        else {
+            holder.mTextView.setTextColor(mContext.getResources().getColor(R.color.black));
+            holder.mCheckBox.setChecked(false);
+        }
+        holder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+
+                if(isChecked){
+                    if(noteInRecycleViewItem.isFinished()==false) {
+                        noteInRecycleViewItem.setFinished(true);
+                        mDAO.updataNote(noteInRecycleViewItem);
+                        holder.mTextView.setTextColor(mContext.getResources().getColor(R.color.text_grey));
+                    }
+                }else{
+                    if(noteInRecycleViewItem.isFinished()==true) {
+                        noteInRecycleViewItem.setFinished(false);
+                        mDAO.updataNote(noteInRecycleViewItem);
+                        Toast.makeText(mContext, "Checked", Toast.LENGTH_SHORT).show();
+                        holder.mTextView.setTextColor(mContext.getResources().getColor(R.color.black));
+                    }
+                }
+            }
+        });
 
         final MyViewHolder vh = (MyViewHolder) holder;
         vh.itemView.setOnClickListener(new View.OnClickListener() {

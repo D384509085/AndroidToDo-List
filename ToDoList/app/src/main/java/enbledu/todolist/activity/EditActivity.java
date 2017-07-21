@@ -34,6 +34,7 @@ public class EditActivity extends AppCompatActivity {
     private Toolbar editToolbar;
     private NoteEntity editNoteEntity;
     private NoteDAOImpl mDAO;
+    private boolean isEdit = false;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -67,9 +68,13 @@ public class EditActivity extends AppCompatActivity {
                 int num = mNumberPicker.getValue();
                 Log.i(TAG, String.valueOf(num));
                 editNoteEntity.setPriorty(num);
-                Log.i(TAG,editNoteEntity.toString());
+                Log.i(TAG, editNoteEntity.toString());
                 mDAO = new NoteDAOImpl(EditActivity.this);
-                mDAO.insertNote(editNoteEntity);
+                if (isEdit) {
+                    mDAO.updataNote(editNoteEntity);
+                } else if (!isEdit) {
+                    mDAO.insertNote(editNoteEntity);
+                }
                 finish();
             }
         });
@@ -79,12 +84,13 @@ public class EditActivity extends AppCompatActivity {
     private void initSavedData() {
         Intent intent = getIntent();
         editNoteEntity = (NoteEntity) intent.getSerializableExtra("note");
-        if ((editNoteEntity==null)) {
+        if ((editNoteEntity == null)) {
             editNoteEntity = new NoteEntity();
             //mNumberPicker.setOnScrollListener(this);
             mNumberPicker.setValue(10);
-        }
-        else {
+            isEdit = false;
+        } else {
+            isEdit = true;
             mTimePicker.setHour(editNoteEntity.getStopHour());
             mTimePicker.setMinute(editNoteEntity.getStopHour());
             titleEdit.setText(editNoteEntity.getTitle());
