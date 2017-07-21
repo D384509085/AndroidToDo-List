@@ -1,8 +1,10 @@
 package enbledu.todolist.activity;
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,9 @@ import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import enbledu.todolist.R;
 import enbledu.todolist.entity.NoteEntity;
@@ -29,6 +34,7 @@ public class EditActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         Log.d(TAG, String.valueOf(getIntent() == null));
@@ -37,15 +43,29 @@ public class EditActivity extends AppCompatActivity {
         initPicker();
         //若intent没有传消息
         editNoteEntity = new NoteEntity();
-
+        Log.i(TAG,editNoteEntity.toString());
 
         okButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 String text, title;
                 text = contextEdit.getText().toString();
                 title = titleEdit.getText().toString();
-
+                int hour = mTimePicker.getHour();
+                int minute = mTimePicker.getMinute();
+                editNoteEntity.setTitle(title);
+                editNoteEntity.setContext(text);
+                editNoteEntity.setStopHour(hour);
+                editNoteEntity.setStopMinute(minute);
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日-HH:mm:ss");
+                Date curDate = new Date(System.currentTimeMillis());
+                String str = formatter.format(curDate);
+                editNoteEntity.setCreateTime(str);
+                editNoteEntity.setFinished(false);
+                int num = mNumberPicker.getValue();
+                editNoteEntity.setPriorty(num);
+                Log.i(TAG,editNoteEntity.toString());
             }
         });
     }
@@ -61,8 +81,8 @@ public class EditActivity extends AppCompatActivity {
     private void initPicker() {
 
         mNumberPicker = (NumberPicker) findViewById(R.id.show_num_picker);
-       // mNumberPicker.setFormatter(this);
-       // mNumberPicker.setOnValueChangedListener(this);
+        // mNumberPicker.setFormatter(this);
+        // mNumberPicker.setOnValueChangedListener(this);
         //mNumberPicker.setOnScrollListener(this);
         mNumberPicker.setMaxValue(23);
         mNumberPicker.setMinValue(0);
@@ -70,7 +90,9 @@ public class EditActivity extends AppCompatActivity {
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
+                editNoteEntity.setStopYear(year);
+                editNoteEntity.setStopMonth(dayOfMonth);
+                editNoteEntity.setStopdate(dayOfMonth);
             }
         });
 

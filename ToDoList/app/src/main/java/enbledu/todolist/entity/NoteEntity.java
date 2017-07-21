@@ -29,6 +29,10 @@ public class NoteEntity {
         this.isFinished = isFinished;
     }
 
+    public NoteEntity() {
+
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -107,5 +111,21 @@ public class NoteEntity {
 
     public boolean isFinished() {
         return isFinished;
+    }
+
+    @Override
+    public String toString() {
+        return "NoteEntity{" +
+                "title='" + title + '\'' +
+                ", context='" + context + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", stopYear=" + stopYear +
+                ", stopMonth=" + stopMonth +
+                ", stopdate=" + stopdate +
+                ", stopHour=" + stopHour +
+                ", stopMinute=" + stopMinute +
+                ", priorty=" + priorty +
+                ", isFinished=" + isFinished +
+                '}';
     }
 }
