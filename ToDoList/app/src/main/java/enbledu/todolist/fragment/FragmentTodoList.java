@@ -14,18 +14,22 @@ import java.util.ArrayList;
 
 import enbledu.todolist.R;
 import enbledu.todolist.adapter.MyRecyclerVIewAdapter;
+import enbledu.todolist.database.NoteDAOImpl;
+import enbledu.todolist.entity.NoteEntity;
+import enbledu.todolist.helper.SortHelper;
 
 /**
  * Created by Administrator on 2017/7/18 0018.
  */
 
-public class FragmentTodoList extends Fragment{
+public class FragmentTodoList extends Fragment {
     private Context mContext;
     private LayoutInflater inflater;
     private View mView;
     private RecyclerView mRecyclerView;
-    private ArrayList<String> mDatas;
+    private ArrayList<NoteEntity> noteDatas;
     private MyRecyclerVIewAdapter myRecyclerVIewAdapter;
+    private NoteDAOImpl mDAO;
 
     public FragmentTodoList(Context mContext) {
         this.mContext = mContext;
@@ -35,12 +39,12 @@ public class FragmentTodoList extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.inflater = inflater;
-        mView= inflater.inflate(R.layout.fragment_todolist,container,false);
+        mView = inflater.inflate(R.layout.fragment_todolist, container, false);
         initDatas();
 
         initView();
 
-        myRecyclerVIewAdapter = new MyRecyclerVIewAdapter(mContext, mDatas);
+        myRecyclerVIewAdapter = new MyRecyclerVIewAdapter(mContext, noteDatas);
         mRecyclerView.setAdapter(myRecyclerVIewAdapter);
         //设置recycleview的布局管理
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -50,13 +54,17 @@ public class FragmentTodoList extends Fragment{
     }
 
     private void initView() {
-        mRecyclerView = (RecyclerView)mView.findViewById(R.id.recyclerview);
+        mRecyclerView = (RecyclerView) mView.findViewById(R.id.recyclerview);
     }
 
     private void initDatas() {
-        mDatas = new ArrayList<String>();
-        for (int i = 'A'; i <= 'z'; i++) {
-            mDatas.add("" + (char) i);
-        }
+        //是否排序
+        boolean isSort = Boolean.parseBoolean(SortHelper.load(mContext));
+        noteDatas = new ArrayList<NoteEntity>();
+        mDAO = new NoteDAOImpl(mContext);
+        noteDatas =  mDAO.getNoteDatas(isSort);
+
+
     }
+
 }

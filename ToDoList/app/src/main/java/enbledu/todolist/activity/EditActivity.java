@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import enbledu.todolist.R;
+import enbledu.todolist.database.NoteDAOImpl;
 import enbledu.todolist.entity.NoteEntity;
 
 public class EditActivity extends AppCompatActivity {
@@ -31,6 +32,7 @@ public class EditActivity extends AppCompatActivity {
     private Button okButton;
     private Toolbar editToolbar;
     private NoteEntity editNoteEntity;
+    private NoteDAOImpl mDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,8 @@ public class EditActivity extends AppCompatActivity {
                 int num = mNumberPicker.getValue();
                 editNoteEntity.setPriorty(num);
                 Log.i(TAG,editNoteEntity.toString());
+                mDAO = new NoteDAOImpl(EditActivity.this);
+                mDAO.insertNote(editNoteEntity);
             }
         });
     }

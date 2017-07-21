@@ -79,4 +79,5 @@ public class MainActivity extends AppCompatActivity {
         mvViewPager.setCurrentItem(0);
         mvViewPager.setOffscreenPageLimit(5);
     }
+
 }

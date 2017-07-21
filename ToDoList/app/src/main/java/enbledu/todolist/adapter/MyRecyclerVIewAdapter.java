@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import enbledu.todolist.R;
+import enbledu.todolist.database.NoteDAOImpl;
+import enbledu.todolist.entity.NoteEntity;
 
 /**
  * Created by Administrator on 2017/7/18 0018.
@@ -18,12 +20,14 @@ import enbledu.todolist.R;
 
 public class MyRecyclerVIewAdapter extends RecyclerView.Adapter<MyRecyclerVIewAdapter.MyViewHolder>{
 
+    private NoteDAOImpl mDAO;
     private LayoutInflater mInflater;
     private Context mContext;
-    private List<String> mDatas;
+    private List<NoteEntity> noteDatas;
 
-    public MyRecyclerVIewAdapter(Context context, List<String> mDatas) {
-        this.mDatas = mDatas;
+    public MyRecyclerVIewAdapter(Context context, List<NoteEntity> noteDatas) {
+        mDAO = new NoteDAOImpl(context);
+        this.noteDatas = noteDatas;
         this.mContext = context;
         mInflater = LayoutInflater.from(context);
     }
@@ -39,14 +43,16 @@ public class MyRecyclerVIewAdapter extends RecyclerView.Adapter<MyRecyclerVIewAd
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.mTextView.setText(mDatas.get(position));
-        holder.mCheckBox.setTag(new Integer(position));
+        NoteEntity noteInRecycleViewItem = noteDatas.get(position);
+        holder.mTextView.setText(noteInRecycleViewItem.getTitle());
+
+
     }
 
 
     @Override
     public int getItemCount() {
-        return mDatas.size();
+        return noteDatas.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

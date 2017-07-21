@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import enbledu.todolist.entity.NoteEntity;
 
@@ -32,7 +31,7 @@ public class NoteDAOImpl implements NoteDataAccessObject {
         } else {
             isFinished_int = 0;
         }
-        db.execSQL("insert into note_info(title,context,createTime,stopYear,stopMonth,stopDate,stopHour,stopMinute,priorty,isFinished) values(?,?,?,?,?)",
+        db.execSQL("insert into note_info(title,context,createTime,stopYear,stopMonth,stopDate,stopHour,stopMinute,priorty,isFinished) values(?,?,?,?,?,?,?,?,?,?)",
                 new Object[]{noteEntity.getTitle(),
                         noteEntity.getContext(),
                         noteEntity.getCreateTime(),
@@ -79,9 +78,9 @@ public class NoteDAOImpl implements NoteDataAccessObject {
     }
 
     @Override
-    public List<NoteEntity> getThreads(boolean isSort) {
+    public ArrayList<NoteEntity> getNoteDatas(boolean isSort) {
         SQLiteDatabase db = mHelper.getReadableDatabase();
-        List<NoteEntity> list = new ArrayList<NoteEntity>();
+        ArrayList<NoteEntity> list = new ArrayList<NoteEntity>();
         /*Cursor cursor = db.rawQuery("select * from thread_info where url = ?",
                  new String[]{url});*/
         Cursor cursor;

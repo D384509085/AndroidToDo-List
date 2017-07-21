@@ -1,6 +1,6 @@
 package enbledu.todolist.database;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import enbledu.todolist.entity.NoteEntity;
 
@@ -27,6 +27,6 @@ public interface NoteDataAccessObject {
     /**
      * 是否按优先级排列
      */
-    public List<NoteEntity> getThreads(boolean isSort);
+    public ArrayList<NoteEntity> getNoteDatas(boolean isSort);
 
 }
