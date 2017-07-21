@@ -13,6 +13,7 @@ import java.util.List;
 import enbledu.todolist.R;
 import enbledu.todolist.database.NoteDAOImpl;
 import enbledu.todolist.entity.NoteEntity;
+import enbledu.todolist.helper.RecyclerItemClickListener;
 
 /**
  * Created by Administrator on 2017/7/18 0018.
@@ -20,6 +21,7 @@ import enbledu.todolist.entity.NoteEntity;
 
 public class MyRecyclerVIewAdapter extends RecyclerView.Adapter<MyRecyclerVIewAdapter.MyViewHolder>{
 
+    private RecyclerItemClickListener.OnItemClickListener mListener;
     private NoteDAOImpl mDAO;
     private LayoutInflater mInflater;
     private Context mContext;
@@ -32,12 +34,15 @@ public class MyRecyclerVIewAdapter extends RecyclerView.Adapter<MyRecyclerVIewAd
         mInflater = LayoutInflater.from(context);
     }
 
+    public void setListener(RecyclerItemClickListener.OnItemClickListener listener) {
+        mListener = listener;
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.note_item, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(view);
         viewHolder.setIsRecyclable(false);
-
         return viewHolder;
     }
 
@@ -46,6 +51,24 @@ public class MyRecyclerVIewAdapter extends RecyclerView.Adapter<MyRecyclerVIewAd
         NoteEntity noteInRecycleViewItem = noteDatas.get(position);
         holder.mTextView.setText(noteInRecycleViewItem.getTitle());
 
+        final MyViewHolder vh = (MyViewHolder) holder;
+        vh.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onItemClick(v, position);
+                }
+            }
+        });
+        vh.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (mListener != null) {
+                    mListener.onItemLongClick(v, position);
+                }
+                return true;
+            }
+        });
 
     }
 

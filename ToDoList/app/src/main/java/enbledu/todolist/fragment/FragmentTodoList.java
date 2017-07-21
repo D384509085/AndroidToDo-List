@@ -1,6 +1,7 @@
 package enbledu.todolist.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,9 +14,11 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import enbledu.todolist.R;
+import enbledu.todolist.activity.EditActivity;
 import enbledu.todolist.adapter.MyRecyclerVIewAdapter;
 import enbledu.todolist.database.NoteDAOImpl;
 import enbledu.todolist.entity.NoteEntity;
+import enbledu.todolist.helper.RecyclerItemClickListener;
 import enbledu.todolist.helper.SortHelper;
 
 /**
@@ -40,15 +43,7 @@ public class FragmentTodoList extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.inflater = inflater;
         mView = inflater.inflate(R.layout.fragment_todolist, container, false);
-        initDatas();
-
         initView();
-
-        myRecyclerVIewAdapter = new MyRecyclerVIewAdapter(mContext, noteDatas);
-        mRecyclerView.setAdapter(myRecyclerVIewAdapter);
-        //设置recycleview的布局管理
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         return mView;
     }
@@ -67,4 +62,27 @@ public class FragmentTodoList extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initDatas();
+        myRecyclerVIewAdapter = new MyRecyclerVIewAdapter(mContext, noteDatas);
+        mRecyclerView.setAdapter(myRecyclerVIewAdapter);
+        //设置recycleview的布局管理
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        myRecyclerVIewAdapter.setListener(new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(mContext, EditActivity.class);
+                intent.putExtra("title", noteDatas)
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
+
+    }
 }

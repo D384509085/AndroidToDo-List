@@ -70,6 +70,7 @@ public class EditActivity extends AppCompatActivity {
                 Log.i(TAG,editNoteEntity.toString());
                 mDAO = new NoteDAOImpl(EditActivity.this);
                 mDAO.insertNote(editNoteEntity);
+                finish();
             }
         });
     }
