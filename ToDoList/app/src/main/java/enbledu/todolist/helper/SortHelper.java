@@ -20,7 +20,7 @@ public class SortHelper {
         FileOutputStream out = null;
         BufferedWriter writer = null;
         try {
-            out = context.openFileOutput("color", Context.MODE_PRIVATE);
+            out = context.openFileOutput("sort", Context.MODE_PRIVATE);
             writer = new BufferedWriter(new OutputStreamWriter(out));
             writer.write(saveThing);
         } catch (FileNotFoundException e) {
@@ -43,7 +43,7 @@ public class SortHelper {
         BufferedReader reader = null;
         StringBuilder content = new StringBuilder();
         try {
-            in = context.openFileInput("color");
+            in = context.openFileInput("sort");
             reader = new BufferedReader(new InputStreamReader(in));
             String line = "";
             while ((line = reader.readLine()) != null) {

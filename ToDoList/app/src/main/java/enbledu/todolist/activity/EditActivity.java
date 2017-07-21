@@ -1,5 +1,6 @@
 package enbledu.todolist.activity;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,18 +35,16 @@ public class EditActivity extends AppCompatActivity {
     private NoteEntity editNoteEntity;
     private NoteDAOImpl mDAO;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
         Log.d(TAG, String.valueOf(getIntent() == null));
-        initToolbar();
         init();
-        initPicker();
-        //若intent没有传消息
-        editNoteEntity = new NoteEntity();
-        Log.i(TAG,editNoteEntity.toString());
+        initSavedData();
+        initToolbar();
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -66,6 +65,7 @@ public class EditActivity extends AppCompatActivity {
                 editNoteEntity.setCreateTime(str);
                 editNoteEntity.setFinished(false);
                 int num = mNumberPicker.getValue();
+                Log.i(TAG, String.valueOf(num));
                 editNoteEntity.setPriorty(num);
                 Log.i(TAG,editNoteEntity.toString());
                 mDAO = new NoteDAOImpl(EditActivity.this);
@@ -75,23 +75,34 @@ public class EditActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void initSavedData() {
+        Intent intent = getIntent();
+        editNoteEntity = (NoteEntity) intent.getSerializableExtra("note");
+        if ((editNoteEntity==null)) {
+            editNoteEntity = new NoteEntity();
+            //mNumberPicker.setOnScrollListener(this);
+            mNumberPicker.setValue(10);
+        }
+        else {
+            mTimePicker.setHour(editNoteEntity.getStopHour());
+            mTimePicker.setMinute(editNoteEntity.getStopHour());
+            titleEdit.setText(editNoteEntity.getTitle());
+            contextEdit.setText(editNoteEntity.getContext());
+            mNumberPicker.setValue(editNoteEntity.getPriorty());
+
+        }
+    }
+
     private void init() {
+        mNumberPicker = (NumberPicker) findViewById(R.id.show_num_picker);
         mCalendarView = (CalendarView) findViewById(R.id.calendarView);
         mTimePicker = (TimePicker) findViewById(R.id.timePicker);
         titleEdit = (EditText) findViewById(R.id.edit_title);
         contextEdit = (EditText) findViewById(R.id.edit_context);
         okButton = (Button) findViewById(R.id.edit_ok_button);
-    }
-
-    private void initPicker() {
-
-        mNumberPicker = (NumberPicker) findViewById(R.id.show_num_picker);
-        // mNumberPicker.setFormatter(this);
-        // mNumberPicker.setOnValueChangedListener(this);
-        //mNumberPicker.setOnScrollListener(this);
         mNumberPicker.setMaxValue(23);
         mNumberPicker.setMinValue(0);
-        mNumberPicker.setValue(10);
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -100,6 +111,9 @@ public class EditActivity extends AppCompatActivity {
                 editNoteEntity.setStopdate(dayOfMonth);
             }
         });
+    }
+
+    private void initPicker() {
 
     }
 

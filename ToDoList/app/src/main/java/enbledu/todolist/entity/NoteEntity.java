@@ -1,10 +1,12 @@
 package enbledu.todolist.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2017/7/18 0018.
  */
 
-public class NoteEntity {
+public class NoteEntity implements Serializable{
     private String title;
     private String context;
     private String createTime;

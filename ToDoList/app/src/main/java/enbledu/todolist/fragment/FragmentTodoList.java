@@ -1,12 +1,15 @@
 package enbledu.todolist.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ import enbledu.todolist.helper.SortHelper;
  */
 
 public class FragmentTodoList extends Fragment {
+    private static final String TAG = "FragmentTodoList";
     private Context mContext;
     private LayoutInflater inflater;
     private View mView;
@@ -53,11 +57,12 @@ public class FragmentTodoList extends Fragment {
     }
 
     private void initDatas() {
-        //是否排序
+        //是否按优先级排序
         boolean isSort = Boolean.parseBoolean(SortHelper.load(mContext));
         noteDatas = new ArrayList<NoteEntity>();
         mDAO = new NoteDAOImpl(mContext);
         noteDatas =  mDAO.getNoteDatas(isSort);
+        Log.i(TAG, String.valueOf(isSort));
 
 
     }
@@ -75,14 +80,42 @@ public class FragmentTodoList extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(mContext, EditActivity.class);
-                intent.putExtra("title", noteDatas)
+                intent.putExtra("note", noteDatas.get(position));
+                startActivity(intent);
             }
 
             @Override
-            public void onItemLongClick(View view, int position) {
+            public void onItemLongClick(View view, final int position) {
+                final AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
+                builder.setTitle("删除吗？");
+                builder.setMessage("你真的真的真的想删除吗？");
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        NoteEntity noteEntity = noteDatas.get(position);
+                        mDAO.deleteNote(noteEntity.getTitle());
+                        refleshVIew();
+                    }
+                });
+                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        refleshVIew();
+                        builder.show();
+                    }
+                });
 
             }
         });
-
+    }
+    public void refleshVIew() {
+        noteDatas.clear();
+        initDatas();
+        myRecyclerVIewAdapter = new MyRecyclerVIewAdapter(mContext, noteDatas);
+        mRecyclerView.setAdapter(myRecyclerVIewAdapter);
+        //设置recycleview的布局管理
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        myRecyclerVIewAdapter.notifyDataSetChanged();
     }
 }

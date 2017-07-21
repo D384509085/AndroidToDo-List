@@ -19,12 +19,14 @@ import enbledu.todolist.adapter.MyFragmentAdapter;
 import enbledu.todolist.fragment.FragmentAlarm;
 import enbledu.todolist.fragment.FragmentTodoList;
 import enbledu.todolist.helper.DepthPageTransformer;
+import enbledu.todolist.helper.SortHelper;
 
 public class MainActivity extends AppCompatActivity {
-
+    private FragmentTodoList fragmentTodoList;
     private Toolbar mToolbar;
     private ViewPager mvViewPager;
     private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +52,13 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItemId == R.id.menu1) {
                     Intent intent = new Intent(MainActivity.this, EditActivity.class);
                     startActivity(intent);
-
                 } else if (menuItemId == R.id.menu2) {
+                    SortHelper.save("false", MainActivity.this);
+                    fragmentTodoList.refleshVIew();
 
+                } else if (menuItemId == R.id.menu3) {
+                    SortHelper.save("true", MainActivity.this);
+                    fragmentTodoList.refleshVIew();
 
                 }
                 return true;
@@ -64,14 +70,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initViewPage() {
-        Fragment fragment1 = new FragmentTodoList(mContext);
+        fragmentTodoList = new FragmentTodoList(mContext);
         Fragment fragment2 = new FragmentAlarm(mContext);
 
         // 将要分页显示的View装入数组中
         List<Fragment> list = new ArrayList<Fragment>();
-        list.add(fragment1);
+        list.add(fragmentTodoList);
         list.add(fragment2);
-        mvViewPager=(ViewPager)findViewById(R.id.pager);
+        mvViewPager = (ViewPager) findViewById(R.id.pager);
         mvViewPager.setAdapter(new MyFragmentAdapter(getSupportFragmentManager(), list));
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.pager_sliding);
         tabs.setViewPager(mvViewPager);
@@ -79,5 +85,4 @@ public class MainActivity extends AppCompatActivity {
         mvViewPager.setCurrentItem(0);
         mvViewPager.setOffscreenPageLimit(5);
     }
-
 }

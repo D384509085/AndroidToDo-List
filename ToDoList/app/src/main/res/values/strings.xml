@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">ToDoList</string>
     <string name="menu1">添加</string>
-    <string name="menu2">选择排序方式</string>
+    <string name="menu2">按时间排序</string>
+    <string name="menu3">按优先级排序</string>
     <string name="edit_title">标题</string>
     <string name="edit_context">内容</string>
 </resources>

@@ -43,6 +43,7 @@ public class NoteDAOImpl implements NoteDataAccessObject {
                         noteEntity.getPriorty(),
                         isFinished_int
                 });
+        Log.i(TAG, String.valueOf(noteEntity.getPriorty()));
         db.close();
     }
 
@@ -50,7 +51,7 @@ public class NoteDAOImpl implements NoteDataAccessObject {
     public void deleteNote(String title) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
         db.execSQL("delete from note_info where title = ?",
-                new Object[]{title});
+                new String[]{title});
 
         db.close();
     }
@@ -99,8 +100,9 @@ public class NoteDAOImpl implements NoteDataAccessObject {
             note.setStopdate(cursor.getInt(cursor.getColumnIndex("stopDate")));
             note.setStopHour(cursor.getInt(cursor.getColumnIndex("stopHour")));
             note.setStopMinute(cursor.getInt(cursor.getColumnIndex("stopMinute")));
+            note.setPriorty(cursor.getInt(cursor.getColumnIndex("priorty")));
+            note.setFinished(1 == cursor.getInt(cursor.getColumnIndex("isFinished")));
             list.add(note);
-            Log.d(TAG, note.toString());
         }
         cursor.close();
         db.close();
