@@ -1,5 +1,6 @@
 package enbledu.todolist.activity;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import enbledu.todolist.R;
+import enbledu.todolist.entity.NoteEntity;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -23,6 +25,7 @@ public class EditActivity extends AppCompatActivity {
     private EditText contextEdit;
     private Button okButton;
     private Toolbar editToolbar;
+    private NoteEntity editNoteEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +33,19 @@ public class EditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit);
         Log.d(TAG, String.valueOf(getIntent() == null));
         initToolbar();
-        initPicker();
         init();
+        initPicker();
+        //若intent没有传消息
+        editNoteEntity = new NoteEntity();
+
+
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text, title;
                 text = contextEdit.getText().toString();
                 title = titleEdit.getText().toString();
-                 
+
             }
         });
     }
@@ -60,7 +67,12 @@ public class EditActivity extends AppCompatActivity {
         mNumberPicker.setMaxValue(23);
         mNumberPicker.setMinValue(0);
         mNumberPicker.setValue(10);
+        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
 
+            }
+        });
 
     }
 
