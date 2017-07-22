@@ -1,14 +1,11 @@
 package enbledu.todolist.Receiver;
 
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.view.WindowManager;
+import android.widget.Toast;
 
 import enbledu.todolist.R;
 
@@ -23,22 +20,31 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         String msg = intent.getStringExtra("msg");
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+        //广播中不能用alertdialog
+/*
+        AlertDialog.Builder builder = new Builder(context);
+        builder.setTitle("提示");
+        builder.setMessage("强制下线");
+        builder.setCancelable(false);
+        builder.setPositiveButton("ok", new OnClickListener() {
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(context);
-        builder.setTitle(R.string.notice);
-        builder.setMessage(msg);
-        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int arg1) {
-                dialog.dismiss();
+            public void onClick(DialogInterface dialog, int which) {
+
+
+
             }
         });
-        Dialog dialog=builder.create();
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        dialog.show();
+        AlertDialog dialog = builder.create();
+
+        dialog.getWindow()
+                .setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+
+        dialog.show();*/
         MediaPlayer player;
         player = MediaPlayer.create(context, R.raw.back);
-        player.setLooping(true);
+        player.setLooping(false);
         player.start();
     }
 

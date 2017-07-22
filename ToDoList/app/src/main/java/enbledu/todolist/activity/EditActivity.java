@@ -224,7 +224,7 @@ public class EditActivity extends AppCompatActivity {
          * 单次提醒
          * mCalendar.getTimeInMillis() 为之前设置的值
          */
-        am.set(AlarmManager.RTC_WAKEUP, /*mCalendar.getTimeInMillis()*/5000, pi);
+        am.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(), pi);
 
         /**
          * 重复提醒
