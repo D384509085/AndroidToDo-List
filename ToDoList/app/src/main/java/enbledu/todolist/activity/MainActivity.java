@@ -20,7 +20,7 @@ import java.util.List;
 
 import enbledu.todolist.R;
 import enbledu.todolist.adapter.MyFragmentAdapter;
-import enbledu.todolist.fragment.FragmentAlarm;
+import enbledu.todolist.fragment.FragmentChart;
 import enbledu.todolist.fragment.FragmentTodoList;
 import enbledu.todolist.helper.DepthPageTransformer;
 import enbledu.todolist.helper.SortHelper;
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViewPage() {
         fragmentTodoList = new FragmentTodoList(mContext);
-        Fragment fragment2 = new FragmentAlarm(mContext);
+        Fragment fragment2 = new FragmentChart(mContext);
 
         // 将要分页显示的View装入数组中
         List<Fragment> list = new ArrayList<Fragment>();

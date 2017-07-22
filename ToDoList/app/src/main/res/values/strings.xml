@@ -10,4 +10,5 @@
     <string name="yes">确定</string>
     <string name="no">取消</string>
     <string name="notice">提醒</string>
+    <string name="MPstring">情况统计</string>
 </resources>
