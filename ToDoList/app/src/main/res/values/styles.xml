@@ -19,4 +19,9 @@
         <!-- 弹出层水平方向上的偏移，即距离屏幕左边的距离，负值会导致右边出现空隙 -->
         <item name="android:dropDownHorizontalOffset">0dp</item>
     </style>
+
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+
+    <item name="android:background">#FFFFFF</item>
+    </style>
 </resources>

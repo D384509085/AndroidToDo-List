@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,24 +102,20 @@ public class FragmentTodoList extends Fragment {
 
             @Override
             public void onItemLongClick(View view, final int position) {
-                final AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
-                builder.setTitle("删除吗？");
-                builder.setMessage("你真的真的真的想删除吗？");
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        NoteEntity noteEntity = noteDatas.get(position);
-                        mDAO.deleteNote(noteEntity.getTitle());
-                        refleshVIew();
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        refleshVIew();
-                        builder.show();
-                    }
-                });
+                Log.i(TAG,"OnItemLongClick");
+                new AlertDialog.Builder(mContext)
+                        .setTitle(R.string.dialog_yes)
+                        .setPositiveButton(R.string.yes,
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                        mDAO.deleteNote(noteDatas.get(position).getTitle());
+                                        refleshVIew();
+
+                                    }
+                                }).setNegativeButton(R.string.no, null).create()
+                        .show();
 
             }
         });

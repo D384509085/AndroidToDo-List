@@ -1,12 +1,16 @@
 package enbledu.todolist.activity;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,6 +33,7 @@ import enbledu.todolist.entity.NoteEntity;
 
 public class EditActivity extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
     private String TAG = "EditActivity";
     private NumberPicker mNumberPicker;
     private CalendarView mCalendarView;
@@ -48,8 +53,62 @@ public class EditActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SYSTEM_ALERT_WINDOW)
+                != PackageManager.PERMISSION_GRANTED) {
+            //进入到这里代表没有权限.
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, 0);
+        } else {
+
+        }
         Log.d(TAG, String.valueOf(getIntent() == null));
         init();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void initSavedData() {
+        Intent intent = getIntent();
+        editNoteEntity = (NoteEntity) intent.getSerializableExtra("note");
+        if ((editNoteEntity == null)) {
+            editNoteEntity = new NoteEntity();
+            //mNumberPicker.setOnScrollListener(this);
+            mNumberPicker.setValue(10);
+            isEdit = false;
+        } else {
+            //存储之前的数据，方便删除闹钟
+            oldEditNoteEntity = editNoteEntity;
+            isEdit = true;
+            mTimePicker.setHour(editNoteEntity.getStopHour());
+            mTimePicker.setMinute(editNoteEntity.getStopHour());
+            titleEdit.setText(editNoteEntity.getTitle());
+            contextEdit.setText(editNoteEntity.getContext());
+            mNumberPicker.setValue(editNoteEntity.getPriorty());
+
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void init() {
+
+        mNumberPicker = (NumberPicker) findViewById(R.id.show_num_picker);
+        mCalendarView = (CalendarView) findViewById(R.id.calendarView);
+        mTimePicker = (TimePicker) findViewById(R.id.timePicker);
+        mTimePicker.setIs24HourView(true);
+
+        titleEdit = (EditText) findViewById(R.id.edit_title);
+        contextEdit = (EditText) findViewById(R.id.edit_context);
+        okButton = (Button) findViewById(R.id.edit_ok_button);
+        mNumberPicker.setMaxValue(23);
+        mNumberPicker.setMinValue(0);
+        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                editNoteEntity.setStopYear(year);
+                editNoteEntity.setStopMonth(month);
+                editNoteEntity.setStopdate(dayOfMonth);
+            }
+        });
         initSavedData();
         initToolbar();
 
@@ -77,55 +136,29 @@ public class EditActivity extends AppCompatActivity {
                 Log.i(TAG, editNoteEntity.toString());
                 mDAO = new NoteDAOImpl(EditActivity.this);
                 if (isEdit) {
-                    //删除之前的闹钟
                     mDAO.updataNote(editNoteEntity);
+                    startRemind(editNoteEntity);
                 } else if (!isEdit) {
                     mDAO.insertNote(editNoteEntity);
+                    startRemind(editNoteEntity);
                 }
                 finish();
             }
         });
     }
-
     @RequiresApi(api = Build.VERSION_CODES.M)
-    private void initSavedData() {
-        Intent intent = getIntent();
-        editNoteEntity = (NoteEntity) intent.getSerializableExtra("note");
-        if ((editNoteEntity == null)) {
-            editNoteEntity = new NoteEntity();
-            //mNumberPicker.setOnScrollListener(this);
-            mNumberPicker.setValue(10);
-            isEdit = false;
-        } else {
-            //存储之前的数据，方便删除闹钟
-            oldEditNoteEntity = editNoteEntity;
-            isEdit = true;
-            mTimePicker.setHour(editNoteEntity.getStopHour());
-            mTimePicker.setMinute(editNoteEntity.getStopHour());
-            titleEdit.setText(editNoteEntity.getTitle());
-            contextEdit.setText(editNoteEntity.getContext());
-            mNumberPicker.setValue(editNoteEntity.getPriorty());
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 0:
+                if(grantResults.length >0 &&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    //用户同意授权
+                    init();
+                }else{
+                    //用户拒绝授权
+                }
+                break;
         }
-    }
-
-    private void init() {
-        mNumberPicker = (NumberPicker) findViewById(R.id.show_num_picker);
-        mCalendarView = (CalendarView) findViewById(R.id.calendarView);
-        mTimePicker = (TimePicker) findViewById(R.id.timePicker);
-        titleEdit = (EditText) findViewById(R.id.edit_title);
-        contextEdit = (EditText) findViewById(R.id.edit_context);
-        okButton = (Button) findViewById(R.id.edit_ok_button);
-        mNumberPicker.setMaxValue(23);
-        mNumberPicker.setMinValue(0);
-        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                editNoteEntity.setStopYear(year);
-                editNoteEntity.setStopMonth(month);
-                editNoteEntity.setStopdate(dayOfMonth);
-            }
-        });
     }
 
     private void initToolbar() {
@@ -143,6 +176,7 @@ public class EditActivity extends AppCompatActivity {
     }
 
     private void startRemind(NoteEntity noteEntity){
+
         Calendar mCalendar;
         //得到日历实例，主要是为了下面的获取时间
         mCalendar = Calendar.getInstance();
@@ -158,7 +192,7 @@ public class EditActivity extends AppCompatActivity {
         //设置在几点提醒  设置的为13点
         mCalendar.set(Calendar.YEAR, noteEntity.getStopYear());
         mCalendar.set(Calendar.MONTH, noteEntity.getStopMonth());
-        mCalendar.set(Calendar.DAY_OF_MONTH, noteEntity.getStopdate())
+        mCalendar.set(Calendar.DAY_OF_MONTH, noteEntity.getStopdate());
         mCalendar.set(Calendar.HOUR_OF_DAY, noteEntity.getStopHour());
         //设置在几分提醒  设置的为25分
         mCalendar.set(Calendar.MINUTE, noteEntity.getStopMinute());
@@ -178,6 +212,8 @@ public class EditActivity extends AppCompatActivity {
 
         //AlarmReceiver.class为广播接受者
         Intent intent = new Intent(EditActivity.this, AlarmReceiver.class);
+        intent.putExtra("msg",noteEntity.getTitle());
+
         PendingIntent pi = PendingIntent.getBroadcast(EditActivity.this, 0, intent, 0);
         //得到AlarmManager实例
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
@@ -188,7 +224,7 @@ public class EditActivity extends AppCompatActivity {
          * 单次提醒
          * mCalendar.getTimeInMillis() 为之前设置的值
          */
-        am.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(), pi);
+        am.set(AlarmManager.RTC_WAKEUP, /*mCalendar.getTimeInMillis()*/5000, pi);
 
         /**
          * 重复提醒

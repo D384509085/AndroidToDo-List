@@ -1,8 +1,12 @@
 package enbledu.todolist.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +26,7 @@ import enbledu.todolist.helper.DepthPageTransformer;
 import enbledu.todolist.helper.SortHelper;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
     private FragmentTodoList fragmentTodoList;
     private Toolbar mToolbar;
     private ViewPager mvViewPager;
@@ -32,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW},
+                MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
 
         initViewPage();
         initToolbar();
@@ -46,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         mToolbar.inflateMenu(R.menu.menu_main);//设置右上角的填充菜单
 
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int menuItemId = item.getItemId();

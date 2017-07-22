@@ -6,4 +6,8 @@
     <string name="edit_title">标题</string>
     <string name="edit_context">内容</string>
     <string name="menu4">按是否完成排序</string>
+    <string name="dialog_yes">是否要删除</string>
+    <string name="yes">确定</string>
+    <string name="no">取消</string>
+    <string name="notice">提醒</string>
 </resources>
