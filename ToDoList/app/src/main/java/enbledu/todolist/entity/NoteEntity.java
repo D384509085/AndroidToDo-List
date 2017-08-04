@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 
 public class NoteEntity implements Serializable{
+
     private String title;
     private String context;
     private String createTime;
